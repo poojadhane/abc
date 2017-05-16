@@ -1,0 +1,93 @@
+Procedures:-
+create or replace procedure prGenerateReport(p_movie_id varchar2) as
+cursor c1 is select theartre_id,no_of_tickets from booking where movie_id=p_movie_id ;
+v_mname movie_details.movie_name%type;
+v_dur movie_details.duration%type;
+v_lang movie_details.language%type;
+begin
+
+select movie_name,duration,language into v_mname,v_dur,v_lang from movie_details where movie_id=p_movie_id;
+dbms_output.put_line('movie name is'||v_mname ||'duration is'|| v_dur ||'language is '|| v_lang);
+for v1 in c1
+loop
+dbms_output.put_line('theatre id is'|| v1.theartre_id || 'no of tickets are' ||v1.no_of_tickets);
+end loop;
+end;
+
+execute prGenerateReport('Mov102');
+*************************************************************************
+9. create or replace procedure GET_DETAILS (p_bus_no bus.bus_no%type, p_details bus.bus_type%type)
+declare
+***********************************************
+Functions:-
+
+create or replace function user_annual_comp(p_eno number,p_sal out number,p_comm out number) return number as
+
+annual_compensation number;
+
+begin
+
+select sal,comm into p_sal,p_comm from emp where empno=p_eno;
+annual_compensation:=(p_sal+nvl(p_comm,0))*12;
+dbms_output.put_line('salary is'||p_sal||'comm is'||p_comm||'annual_comp is'||annual_compensation);
+return annual_compensation;
+
+exception
+when no_data_found then
+dbms_output.put_line('invalid empno');
+end;
+/
+
+declare
+p_eno emp.empno%type:=&enter_empno;
+p_sal emp.sal%type;
+p_comm emp.comm%type;
+abc number;
+begin
+abc:=user_annual_comp(p_eno,p_sal,p_comm);
+dbms_output.put_line('salary is'||p_sal||'comm is'||p_comm||'annual_comp is'||abc);
+end;
+/
+
+select user_annual_comp(7200) from dual;
+******************************************************************
+•	Create a function named USER_VALID_DEPTNO that has a single parameter p_dno to accept a department number and returns a BOOLEAN value. The function returns TRUE if the department number exists in the DEPARTMENTS table else it returns FALSE.
+•	Create a procedure named SHOW_STRENGTH that accepts department number in a single parameter p_deptno from user. The procedure gives a call to USER_VALID_DEPTNO. If the function returns TRUE then the procedure finds out how many employees are there in the department from the EMPLOYEES table and displays the same on the screen. If the function returns FALSE then the procedure displays an appropriate error message.
+•	Give call to SHOW_STRENGTH by passing on department number 10. Do the same for department number 76
+
+
+create or replace function user_valid_deptno(p_dno dept.deptno%type) return boolean as
+ct number;
+begin
+select count(*) into ct from dept where deptno=p_dno;
+if ct=1 then
+dbms_output.put_line('dept no exists');
+return true;
+else
+dbms_output.put_line('dept not exists');
+return false;
+end if;
+end;
+
+create or replace procedure show_strength (p_dno emp.deptno%type) as
+ct1 number;
+invalid_data exception;
+begin
+if  user_valid_deptno(p_dno) then
+select count(*) into ct1 from emp where deptno=p_dno;
+dbms_output.put_line('count of employees is '|| ct1);
+else
+raise invalid_data;
+end if;
+exception 
+when invalid_data then
+dbms_output.put_line('invalid data');
+end;
+
+execute show_strength(10);
+*******************************************************************************
+Packages:
+
+2) 
+create or replace package my_emp_pack as
+function
