@@ -1,0 +1,222 @@
+Q1) 
+create or replace package pkg_sal as
+procedure show_sal(p_empno emp.empno%type);
+end;
+/
+
+--------------------------------------------
+
+create or replace package body pkg_sal as
+function sal_calc(p_empno emp.empno%type) return boolean as
+ct number:=0;
+begin
+select count(*) into ct from emp where empno=p_empno;
+if ct=1 then
+return true;
+else
+return false;
+end if;
+end;
+
+procedure show_sal(p_empno emp.empno%type) as
+
+v_ename emp.ename%type;
+v_sum emp.sal%type;
+v_avg emp.sal%type;
+begin
+if (sal_calc(p_empno)) then
+select sum(sal),avg(sal) into v_sum,v_avg from emp where empno=p_empno;
+dbms_output.put_line('Emp no'||p_empno||'name of employee'||v_ename||'sum of sal'||v_sum||'avg sal'||v_avg);
+else
+dbms_output.put_line('error');
+end if;
+end;
+end;
+
+
+execute pkg_sal.show_sal(778);
+
+
+
+select e.ename,e.empno,m.empno,(m.ename)mgr from emp e,emp m where e.mgr=m.empno;
+=========================================================
+
+Q2)
+Create a procedure Show_Details which will take Mgr as input and do the following validations:
+
+1.	If mgr doesn’t exists then handle the Predefined named exception with appropriate error msg.
+2.	If mgr exists then display the details in the following way. If commission is NULL then it should be displayed as 0. 
+
+Magaer Id:
+Manager Name:
+Depatment Name:
+
+Employee ID	Employee Name	Hiredate		Commission
+….			…..			……			….
+…			…..			……			….	
+
+
+
+
+create or replace procedure show_details(p_mgr emp.mgr%type) as
+ct number;
+v_eno emp.empno%type;
+v_ename emp.ename%type;
+v_dept dept.dname%type;
+cursor c1 is select e.empno,e.ename,d.dname from emp e,dept d  where e.deptno=d.deptno and e.job='MANAGER';
+cursor c2 is select empno,ename,hiredate,nvl(comm,0) comm from emp where mgr=p_mgr;
+begin
+
+select count(*) into ct from emp where mgr=p_mgr;
+if ct=1 then
+ 
+for v1 in c1
+loop
+dbms_output.put_line('manager id'||v1.empno||'manager name'||v1.ename||'dept name'||v1.dname);
+end loop;
+
+for v2 in c2
+loop
+dbms_output.put_line('Employee id'||v2.empno);
+dbms_output.put_line('Employee name'||v2.ename);
+dbms_output.put_line('Hire date'||v2.hiredate);
+dbms_output.put_line('commission '||v2.comm);
+end loop;
+else
+dbms_output.put_line('error');
+end if;
+end;
+/
+
+execute show_details(7782);
+
+=============================================================================
+
+Q4)
+
+create or replace package pkg_show_details as
+procedure prEmpDetails(p_sal emp.sal%type);
+procedure prEmpDetails(p_hire emp.hiredate%type);
+end;
+/
+
+create or replace package body pkg_show_details as
+procedure prEmpDetails(p_sal emp.sal%type) as
+
+invalid_data exception;
+cursor c1 is select empno,ename,sal,deptno from emp where sal<=p_sal;
+begin
+
+for v1 in c1
+loop
+dbms_output.put_line('employee id'||v1.empno);
+dbms_output.put_line('employee name'||v1.ename);
+dbms_output.put_line('employee sal'||v1.sal);
+dbms_output.put_line('employee deptid is'||v1.deptno);
+end loop;
+
+exception
+when invalid_data then
+dbms_output.put_line('invalid data');
+end;
+
+
+procedure prEmpDetails(p_hire emp.hiredate%type) as
+hiredate emp.hiredate%type;
+invalid_data exception;
+cursor c2 is select empno,ename,sal,deptno from emp where hiredate<=p_hire;
+begin
+
+for v2 in c2
+loop
+dbms_output.put_line('employee id'||v2.empno);
+dbms_output.put_line('employee name'||v2.ename);
+dbms_output.put_line('employee sal'||v2.sal);
+dbms_output.put_line('employee deptid is'||v2.deptno);
+end loop;
+exception
+when invalid_data then
+dbms_output.put_line('invalid data');
+end;
+end;
+
+
+execute pkg_show_details.prEmpdetails(to_date('17-DEC-80'));
+
+
+=================================================================
+
+Q3)
+create or replace function GET_Anual_Salary(p_deptno emp.deptno%type)return number as
+cursor c1 is select e.deptno,d.dname,(sal*12) sal from emp e,dept d where e.deptno=d.deptno;
+ct number;
+begin
+select count(*) into ct from emp where deptno=p_deptno;
+if ct>1 then
+for v1 in c1
+loop
+dbms_output.put_line('Department id'||v1.deptno);
+dbms_output.put_line('Department name'||v1.dname);
+dbms_output.put_line('Annual sal'||v1.sal);
+return v1.sal;
+end loop;
+
+else
+dbms_output.put_line('error');
+end if;
+end;
+
+declare
+a number;
+begin
+a:=GET_Anual_Salary(10);
+dbms_output.put_line(a);
+end;
+/
+
+
+
+========================================
+
+collections:
+ create or replace type marks_type10 as object
+(subject varchar2(25),midtermmarks number(3),annualmarks number(3));
+
+create table mymarks10(marks marks_type10);
+
+insert into mymarks10 values(marks_type10('phy',66,77));
+
+insert into mymarks10 values(marks_type10('chem',77,88));
+
+insert into mymarks10 values(marks_type10('phy',88,99));
+
+select m.marks.midtermmarks,m.marks.annualmarks from mymarks10 m where m.marks.subject='phy';
+
+===========================================
+
+create or replace type cust_tab10 as object
+(cust_id number,cust_name varchar2(20),plan_name varchar2(20));
+
+create type cust_details10 as varray(5) of cust_tab10;
+
+create table cust_tab_details10(srno number(10) primary key,cust_info cust_details10,cust_number number(10));
+
+insert into cust_tab_details10 values(120,cust_details10(cust_tab10(111,'pooja','idea'),cust_tab10(112,'shefu','vodafone')),123);
+
+insert into cust_tab_details10 values(121,cust_details10(cust_tab10(112,'shefu','idea'),cust_tab10(112,'shefu','idea')),145);
+
+declare
+var cust_details10;
+cursor c1 is select * from cust_tab_details10;
+begin
+for y in c1
+loop
+select cust_info into var from cust_tab_details10 where srno=y.srno;
+for x in 1..var.count
+loop
+dbms_output.put_line('cust_id is'||var(x).cust_id||'cust name'||var(x).cust_name||'plan name is'||var(x).plan_name);
+end loop;
+end loop;
+end;
+
+
