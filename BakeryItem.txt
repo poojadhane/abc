@@ -1,0 +1,157 @@
+<%@page import="com.dao.ProductDaoImpl"%>
+<%@page import="com.dao.ProductDao"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <link rel="stylesheet" type="text/css" href="css1.css">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<title>Bakery Item</title>
+<script type="text/javascript">
+function notAvailable()
+{
+	alert("sorry this item not available for home delivery");
+	}
+</script>
+</head>
+
+<body style="height: 192px; width: 833px; ">
+ <h1 class="first">Bihar Bakery</h1>
+<h1 align="center"><a href="Register.html" style="text-align: center;">Registration </a>|
+                  <a href="Login.html"> Login</a>|
+	     <a href="Status.html">Order Status </a>|
+	     <a ><font color="red">Products</font> </a><br><br>
+	     <font color="orange">Product List</font>
+</h1>
+
+<% ProductDao product=new ProductDaoImpl();  %>
+<table align="center" height="250" width="900" cellspacing="20" style="margin: 10px;" >
+  <tr>
+     <td><a href="BakeryItem.jsp" onclick="notAvailable()"><img  src="C:\Users\Ct0t1868\workspace\Bakery Delivery\WebContent\img\biscuit.jpg" alt="BISCUIT" align="center" style="height: 69px; width: 109px; ">
+     <br>biscuit
+     </a>      		   
+         <br> price<%=product.getPrice(103) %> available<%=product.getQuantity(103) %>
+          <%if(product.getQuantity(103)==0)
+      {   %>
+    	  <center style="color:red">Item not available</center>
+    <% }  %>  
+         <br><%if(product.getHomeDelivery(103).equalsIgnoreCase("y")) 
+               { %>
+               Home Delivery available
+            <% }  %>   
+              
+         </td>
+     <td><a href="BakeryController?op=bread&id=101&cost=50"><img src="C:\Users\Ct0t1868\workspace\Bakery Delivery\WebContent\img\bread.jpeg" alt="BREAD" align="center" style="height: 69px; width: 109px; ">
+     <%if(product.getQuantity(101)==0)
+      {   %>
+    	  <center style="color:red">Item not available</center>
+    <% }  %>  
+     <br>bread
+     </a>
+     <br> price<%=product.getPrice(101) %> available<%=product.getQuantity(101) %>
+         <br><%if(product.getHomeDelivery(101).equalsIgnoreCase("y")) 
+               { %>
+               Home Delivery available
+            <% }  %>   
+     </td>
+     
+     
+     
+     <td><a href="BakeryController?op=browny&id=109&cost=90"><img src="C:\Users\Ct0t1868\workspace\Bakery Delivery\WebContent\img\browny.jpg" alt="BROWNY" align="center" style="height: 69px; width: 109px; ">
+     <br>browny</a>
+      <%if(product.getQuantity(109)==0)
+      {   %>
+    	  <center style="color:red">Item not available</center>
+    <% }  %>  
+     <br> price<%=product.getPrice(109) %> available<%=product.getQuantity(109) %>
+         <br><%if(product.getHomeDelivery(109).equalsIgnoreCase("y")) 
+               { %>
+               Home Delivery available
+            <% }  %>   
+     </td>
+  </tr>
+  
+  <tr>
+     <td><a href="BakeryController?op=bun&id=102&cost=55"><img src="C:\Users\Ct0t1868\workspace\Bakery Delivery\WebContent\img\bun.jpg" alt="BUN" align="center" style="height: 69px; width: 109px; ">
+     <br>bun</a>
+      <%if(product.getQuantity(102)==0)
+      {   %>
+    	  <center style="color:red">Item not available</center>
+    <% }  %>  
+     <br> price<%=product.getPrice(102) %> available<%=product.getQuantity(102) %>
+         <br><%if(product.getHomeDelivery(102).equalsIgnoreCase("y")) 
+               { %>
+               Home Delivery available
+            <% }  %>   
+     </td>     
+     <td><a href="BakeryController?op=cake&id=105&cost=70"><img src="C:\Users\Ct0t1868\workspace\Bakery Delivery\WebContent\img\cake.jpg" align="center" alt="CAKE" style="height: 69px; width: 109px; ">
+     <br>cake</a>
+      <%if(product.getQuantity(105)==0)
+      {   %>
+    	  <center style="color:red">Item not available</center>
+    <% }  %>  
+     <br> price<%=product.getPrice(105) %> available<%=product.getQuantity(105) %>
+         <br><%if(product.getHomeDelivery(105).equalsIgnoreCase("y")) 
+               { %>
+               Home Delivery available
+            <% }  %>   
+     </td>
+     <td><a href="BakeryController?op=donut&id=104&cost=65"><img src="C:\Users\Ct0t1868\workspace\Bakery Delivery\WebContent\img\donut.jpg" align="center" alt="DONUT" style="height: 69px; width: 109px; ">
+     <br>donut
+     </a>
+      <%if(product.getQuantity(104)==0)
+      {   %>
+    	  <center style="color:red">Item not available</center>
+    <% }  %>  
+     <br> price<%=product.getPrice(104) %> available<%=product.getQuantity(104) %>
+         <br><%if(product.getHomeDelivery(104).equalsIgnoreCase("y")) 
+               { %>
+               Home Delivery available
+            <% }  %>   
+     </td>
+  </tr>
+  
+  <tr>
+     <td><a href="BakeryItem.jsp" onclick="notAvailable()"><img src="C:\Users\Ct0t1868\workspace\Bakery Delivery\WebContent\img\muffins.jpg" align="center" alt="MUFFINS" style="height: 69px; width: 109px; ">
+     <br>muffin</a>
+      <%if(product.getQuantity(106)==0)
+      {   %>
+    	  <center style="color:red">Item not available</center>
+    <% }  %>  
+     <br> price<%=product.getPrice(106) %> available<%=product.getQuantity(106) %>
+         <br><%if(product.getHomeDelivery(106).equalsIgnoreCase("y")) 
+               { %>
+               Home Delivery available
+            <% }  %>   
+     </td>
+     <td><a href="BakeryController?op=pastry&id=107&cost=80"><img src="C:\Users\Ct0t1868\workspace\Bakery Delivery\WebContent\img\pastry.jpg" align="center" alt="PASTRY" style="height: 69px; width: 109px; ">
+     <br>pastry</a>
+      <%if(product.getQuantity(107)==0)
+      {   %>
+    	  <center style="color:red">Item not available</center>
+    <% }  %>  
+     <br> price<%=product.getPrice(107) %> available<%=product.getQuantity(107) %>
+         <br><%if(product.getHomeDelivery(107).equalsIgnoreCase("y")) 
+               { %>
+               Home Delivery available
+            <% }  %>   </td>
+     <td><a href="BakeryController?op=puff&id=108&cost=85"><img src="C:\Users\Ct0t1868\workspace\Bakery Delivery\WebContent\img\puff.jpg" align="center" alt="PUFF" style="height: 69px; width: 109px; ">
+     <br>puff</a>
+      <%if(product.getQuantity(108)==0)
+      {   %>
+    	  <center style="color:red">Item not available</center>
+    <% }  %>  
+     <br> price<%=product.getPrice(108) %> available<%=product.getQuantity(108) %>
+         <br><%if(product.getHomeDelivery(108).equalsIgnoreCase("y")) 
+               { %>
+               Home Delivery available
+            <% }  %>   
+     </td>
+  </tr>
+  
+  
+</table>
+</body>
+</html>
